@@ -9,14 +9,13 @@ import java.util.function.BiConsumer;
 /**
  * A simple implementation of binary search trees.
  *
- * @author Your Name Here
- * @author Your Name Here
+ * @author Mitch Paiva
  * @author Samuel A. Rebelsky
  *
  * @param <K>
- *   The type used for keys.
+ *            The type used for keys.
  * @param <V>
- *   The type used for values.
+ *            The type used for values.
  */
 public class SimpleBST<K, V> implements SimpleMap<K, V> {
 
@@ -53,7 +52,7 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    * specified comparator.
    *
    * @param comp
-   *   The comparator used to compare keys.
+   *             The comparator used to compare keys.
    */
   public SimpleBST(Comparator<? super K> comp) {
     this.order = comp;
@@ -78,9 +77,9 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    * Set the value associated with key.
    *
    * @param key
-   *   The key to use.
+   *              The key to use.
    * @param value
-   *   The associated value.
+   *              The associated value.
    *
    * @return the previous value associated with key (or null, if there's no
    *         such value)
@@ -89,25 +88,44 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    */
   @Override
   public V set(K key, V value) {
-    return null;        // STUB
+    root = insert(root, key, value);
+    return this.cachedValue;
   } // set(K, V)
+
+  public BSTNode<K, V> insert(BSTNode<K, V> node, K key, V value) {
+    if (node == null) {
+      this.cachedValue = null;
+      this.size++;
+      return new BSTNode<K, V>(key, value);
+    } else if (order.compare(key, node.key) == 0) {
+      this.cachedValue = get(key);
+      node.value = value;
+      return node;
+    } else if (order.compare(key, node.key) < 0) {
+      node.left = insert(node.left, key, value);
+      return node;
+    } else {
+      node.right = insert(node.right, key, value);
+      return node;
+    }
+  }
 
   /**
    * Get the value associated with key.
    *
    * @param key
-   *   The key to use.
+   *            The key to use.
    *
    * @return the corresponding value.
    *
    * @throws IndexOutOfBoundsException if the key is not in the map.
-   * @throws NullPointerException if the key is null.
+   * @throws NullPointerException      if the key is null.
    */
   @Override
   public V get(K key) {
     if (key == null) {
-      throw new NullPointerException("null key");
-    } // if
+      throw new NullPointerException();
+    }
     return get(key, root);
   } // get(K, V)
 
@@ -118,34 +136,34 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    */
   @Override
   public int size() {
-    return 0;           // STUB
+    return 0; // STUB
   } // size()
 
   /**
    * Determine if a key appears in the table.
    *
    * @param key
-   *   The key to check.
+   *            The key to check.
    *
    * @return true if the key appears in the table and false otherwise.
    */
   @Override
   public boolean containsKey(K key) {
-    return false;       // STUB
+    return false; // STUB
   } // containsKey(K)
 
   /**
    * Remove the value with the given key. Also remove the key.
    *
    * @param key
-   *   The key to remove.
+   *            The key to remove.
    *
    * @return The associated value (or null, if there is no associated value).
    * @throws NullPointerException if the key is null.
    */
   @Override
   public V remove(K key) {
-    return null;        // STUB
+    return null; // STUB
   } // remove(K)
 
   /**
@@ -202,16 +220,7 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
     };
   } // values()
 
-  /**
-   * Apply a procedure to each key/value pair.
-   *
-   * @param action
-   *   The action to perform for each key/value pair.
-   */
-  @Override
-  public void forEach(BiConsumer<? super K, ? super V> action) {
-    // STUB
-  } // forEach
+ 
 
   // +----------------------+----------------------------------------
   // | Other public methods |
@@ -221,7 +230,7 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    * Dump the tree to some output location.
    *
    * @param pen
-   *   The PrintWriter used to dump the tree.
+   *            The PrintWriter used to dump the tree.
    */
   public void dump(PrintWriter pen) {
     dump(pen, root, "");
@@ -235,11 +244,11 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    * Dump a portion of the tree to some output location.
    *
    * @param pen
-   *   The PrintWriter used to dump the subtree.
+   *               The PrintWriter used to dump the subtree.
    * @param node
-   *   The root of the subtree.
+   *               The root of the subtree.
    * @param indent
-   *   How much to indent the subtree.
+   *               How much to indent the subtree.
    */
   void dump(PrintWriter pen, BSTNode<K, V> node, String indent) {
     if (node == null) {
@@ -254,19 +263,19 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
   } // dump
 
   /**
-   * Get the value associated with a key in a subtree rooted at node.  See the
+   * Get the value associated with a key in a subtree rooted at node. See the
    * top-level get for more details.
    *
    * @param key
-   *   The key to search for.
+   *             The key to search for.
    * @param node
-   *   The root of the subtree to look through.
+   *             The root of the subtree to look through.
    *
    * @return
-   *   The corresponding value.
+   *         The corresponding value.
    *
    * @throws IndexOutOfBoundsException
-   *   when the key is not in the subtree.
+   *                                   when the key is not in the subtree.
    */
   V get(K key, BSTNode<K, V> node) {
     if (node == null) {
