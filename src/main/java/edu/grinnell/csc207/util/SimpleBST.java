@@ -92,6 +92,13 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
     return this.cachedValue;
   } // set(K, V)
 
+  /**
+   * A helper insert function for the set function.
+   * @param node
+   * @param key
+   * @param value
+   * @return
+   */
   public BSTNode<K, V> insert(BSTNode<K, V> node, K key, V value) {
     if (node == null) {
       this.cachedValue = null;
@@ -220,6 +227,24 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
     };
   } // values()
 
+  /**
+   * Perform an action on each key-value pair.
+   * 
+   * @param action
+   */
+  @Override
+  public void forEach(BiConsumer<? super K, ? super V> action) {
+      if (action == null) {
+          throw new NullPointerException();
+      }
+  
+      Iterator<BSTNode<K, V>> nodesIterator = this.nodes();
+  
+      while (nodesIterator.hasNext()) {
+          BSTNode<K, V> curr = nodesIterator.next();
+          action.accept(curr.key, curr.value);
+      }
+  }
  
 
   // +----------------------+----------------------------------------
@@ -324,5 +349,4 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
       } // checkInit
     }; // new Iterator
   } // nodes()
-
 } // class SimpleBST
